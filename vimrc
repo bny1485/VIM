@@ -4,60 +4,59 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-" add all your plugins here (note older versions of Vundle
-" used Bundle instead of Plugin)
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'vim-scripts/indentpython.vim'
+
+" https://github.com/preservim/nerdtree
+Plugin 'preservim/nerdtree'
+
+" https://github.com/ycm-core/YouCompleteMe
 Plugin 'Valloric/YouCompleteMe'
+
+" power line jadi keyboard azad
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'vim-scripts/indentpython.vim'
+
+" check syntacs
 Plugin 'vim-syntastic/syntastic'
 Plugin 'nvie/vim-flake8'
-Plugin 'scrooloose/nerdtree'
-Plugin 'jistr/vim-nerdtree-tabs'
-
-" powerline
-Plugin 'Lokaltog/powerline'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-
-" icone ??which site 
-Plugin 'ryanoasis/vim-devicons'
-
-" https://github.com/JamshedVesuna/vim-markdown-preview.git
-Plugin 'JamshedVesuna/vim-markdown-preview'
-
-" https://github.com/joshdick/onedark.vim.git
-Plugin 'colors/onedark.vim'
-
-" https://github.com/sheerun/vim-polyglot
-Plugin 'sheerun/vim-polyglot'
-
-" https://github.com/edkolev/tmuxline.vim
-Plugin 'edkolev/tmuxline.vim'
-
-" https://github.com/itchyny/lightline.vim
-
-Plugin 'itchyny/lightline.vim'
-
-
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+
+
+
+" show bad white space 
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+ highlight BadWhitespace ctermbg=red guibg=darkred
+
+
+
+" onedark powerline
+let g:lightline = {
+  \ 'colorscheme': 'onedark',
+  \ }
+
 
 " Enable folding
 set foldmethod=indent
-set foldlevel=99
+  set foldlevel=99
 
-let g:tmuxline_preset = 'tmux'
-
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
- highlight BadWhitespace ctermbg=red guibg=darkred
 
 
 au BufNewFile,BufRead *.py
@@ -69,29 +68,13 @@ au BufNewFile,BufRead *.py
     \set autoindent
     \set fileformat=unix
 
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-
-" Open file in new tab with ctrl + t
-let NERDTreeMapOpenInTab= '<c-t>'
-
-
-" ---- vim-airline ----
-" require powerline-symbol patched font installed
-" install Roboto Mono given in .vim/fonts/
-let g:airline_powerline_fonts = 1
-" remove empty angle at the end
-let g:airline_skip_empty_sections = 1
-" set airline theme
-"let g:airline_theme='deus'
-" extension for tab line
-let g:airline#extensions#tabline#enabled = 0
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#formatter = 'unique_tail'
-let g:airline#extensions#clock#format = '%c'
 
 
 
 let python_highlight_all=1
+ syntax on
+
+colorscheme onedark
 
 set number
 set showmatch
@@ -101,17 +84,10 @@ set wildignore=*.swp,*.bak,*.pyc
 set visualbell
 set noerrorbells
 
-let g:lightline = {
-  \ 'colorscheme': 'onedark',
-  \ }
+" open automaticly nerdtree if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-
-let g:onedark_hide_endofbuffer=0
-let g:airline_theme='onedark'
-
-
-syntax on
-colorscheme onedark
-set encoding=UTF-8
-
+set encoding=utf-8
